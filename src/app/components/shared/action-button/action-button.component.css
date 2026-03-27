@@ -1,0 +1,27 @@
+.action-btn {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+  }
+  
+  .action-btn:hover {
+    opacity: 0.9;
+  }
+  
+  .primary {
+    background-color: white; /* En tu foto el botón 'New Appointment' es blanco con texto negro */
+    color: black;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+  }
+  
+  .secondary {
+    background-color: white;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+  }

@@ -1,0 +1,67 @@
+/* auth-pages.css */
+
+/* Contenedor de página lila centrado (Flexbox total) */
+.auth-page {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0ecff; /* Fondo lila claro como en la foto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Asegura que cubra todo si hay un layout base */
+    top: 0;
+    left: 0;
+    z-index: 1001; /* Por encima de todo, incluso el Sidebar */
+  }
+  
+  /* Tarjeta central minimalista */
+  .auth-card {
+    width: 100%;
+    max-width: 440px; /* Ancho similar al de las capturas */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a0b2e;
+    margin: 0 0 10px 0;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0 0 40px 0;
+  }
+  
+  .subtitle a {
+    color: var(--primary-purple);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  
+  form {
+    width: 100%;
+  }
+  
+  /* Botón Login/Sign Up (el botón oscuro) */
+  .auth-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 30px;
+    background-color: #1a0b2e; /* Morado oscuro de la foto */
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: opacity 0.2s;
+  }
+  
+  .auth-btn:hover {
+    opacity: 0.9;
+  }
