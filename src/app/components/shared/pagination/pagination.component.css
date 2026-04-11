@@ -1,0 +1,33 @@
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+  
+  .page-btn {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    color: var(--text-muted);
+  }
+  
+  .page-btn.active {
+    background-color: var(--bg-sidebar);
+    color: white;
+  }
+  
+  .page-btn:disabled {
+    opacity: 0.3;
+  }
+  
+  select {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-sidebar);
+    color: white;
+  }

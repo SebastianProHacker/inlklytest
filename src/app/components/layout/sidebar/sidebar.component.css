@@ -1,0 +1,50 @@
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  
+  /* ESTO HACE QUE LLEGUE HASTA ABAJO */
+  height: 100vh; 
+  position: sticky; /* Opcional: para que se quede fijo si haces scroll en el contenido */
+  top: 0;
+  box-sizing: border-box; /* Asegura que el padding no sume al alto total */
+}
+
+.logo h1 {
+  font-size: 20px;
+  padding: 0 24px;
+  margin-bottom: 40px;
+}
+
+/* Unificado con el nombre del HTML */
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1; /* Hace que el área de navegación ocupe el espacio restante */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+/* Corregido para que coincida con routerLinkActive="active" */
+.nav-item:hover, .nav-item.active {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-right: 4px solid var(--primary-purple);
+}
+
+.icon {
+  margin-right: 12px;
+}

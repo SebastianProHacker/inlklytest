@@ -1,0 +1,62 @@
+/* src/app/components/shared/dynamic-modal/dynamic-modal.component.css */
+
+/* Fondo oscuro detrás del modal */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Por encima de todo */
+    backdrop-filter: blur(2px); /* Efecto blur sutil */
+  }
+  
+  /* La caja blanca del modal (basada en image_4.png) */
+  .modal-container {
+    background-color: var(--bg-card); /* Blanco */
+    width: 90%;
+    max-width: 480px; /* Ancho similar al de la foto */
+    border-radius: var(--radius-lg); /* Bordes redondeados */
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); /* Sombra pronunciada */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Cabecera del modal */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color); /* Línea divisoria sutil */
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  
+  .close-btn:hover {
+    color: var(--text-main);
+  }
+  
+  /* Cuerpo del modal (donde irá el formulario) */
+  .modal-body {
+    padding: 24px;
+  }

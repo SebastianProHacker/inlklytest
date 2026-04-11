@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    /* Colors */
+    --bg-main: #f3f2f7;
+    --bg-sidebar: #1a0b2e;
+    --bg-card: #ffffff;
+    --primary-purple: #6343d8;
+    --secondary-purple: #f0ecff;
+    --text-main: #1a1a1a;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    
+    /* Shared properties */
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+  }
+  
+  /* Contenedor principal para el layout */
+  .app-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 24px 40px;
+  }
