@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -6,6 +6,7 @@ import { ActionButtonComponent } from '../../../../components/shared/action-butt
 import { DynamicModalComponent } from '../../../../components/shared/dynamic-modal/dynamic-modal.component';
 import { InventoryService } from '../../../../core/services/inventory.service';
 import { MaterialType } from '../../../../core/models/inventory.model';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-new-material-form',
@@ -20,9 +21,11 @@ export class NewMaterialFormComponent implements OnInit {
   showNewTypeInput = false;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private dialogRef: DialogRef,
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    private notifications: NotificationService,
+    private cdr: ChangeDetectorRef
   ) {
     this.materialForm = this.fb.group({
       name: ['', Validators.required],
@@ -41,6 +44,7 @@ export class NewMaterialFormComponent implements OnInit {
   loadTypes() {
     this.inventoryService.getMaterialTypes().subscribe(types => {
       this.materialTypes = types;
+      this.cdr.markForCheck();
     });
   }
 
@@ -66,10 +70,7 @@ export class NewMaterialFormComponent implements OnInit {
       next: (res: any) => {
         this.saveMaterial(res.data.id);
       },
-      error: (err) => {
-        console.error('Detalle del error:', err); // Mira esto en la consola F12
-        alert(`Error: ${err.error?.message || err.statusText || 'Unknown error'}`);
-      }
+      error: () => {}
     });
   } else {
       this.saveMaterial(formData.materialTypeId);
@@ -83,8 +84,11 @@ export class NewMaterialFormComponent implements OnInit {
     };
     
     this.inventoryService.addMaterial(payload).subscribe({
-      next: () => this.dialogRef.close(true),
-      error: (err) => alert('Error saving material')
+      next: () => {
+        this.notifications.success('Material creado correctamente.');
+        this.dialogRef.close(true);
+      },
+      error: () => {}
     });
   }
 

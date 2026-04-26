@@ -1,27 +1,76 @@
 .action-btn {
-    display: flex;
-    align-items: center;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: opacity 0.2s;
-  }
-  
-  .action-btn:hover {
-    opacity: 0.9;
-  }
-  
-  .primary {
-    background-color: white; /* En tu foto el botón 'New Appointment' es blanco con texto negro */
-    color: black;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
-  }
-  
-  .secondary {
-    background-color: white;
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  white-space: nowrap;
+  outline: none;
+}
+
+.action-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.action-btn.loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.action-btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(99, 67, 216, 0.3);
+}
+
+/* Primary variant */
+.primary {
+  background-color: var(--bg-sidebar);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow);
+}
+
+.primary:hover:not(:disabled):not(.loading) {
+  background-color: var(--bg-sidebar-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Secondary variant */
+.secondary {
+  background-color: white;
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.secondary:hover:not(:disabled):not(.loading) {
+  background-color: var(--secondary-purple);
+  border-color: var(--border-focus);
+  color: var(--primary-purple);
+}
+
+/* Spinner */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,67 +1,155 @@
 /* auth-pages.css */
 
-/* Contenedor de página lila centrado (Flexbox total) */
 .auth-page {
-    width: 100vw;
-    height: 100vh;
-    background-color: #f0ecff; /* Fondo lila claro como en la foto */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed; /* Asegura que cubra todo si hay un layout base */
-    top: 0;
-    left: 0;
-    z-index: 1001; /* Por encima de todo, incluso el Sidebar */
-  }
-  
-  /* Tarjeta central minimalista */
-  .auth-card {
-    width: 100%;
-    max-width: 440px; /* Ancho similar al de las capturas */
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  h1 {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1a0b2e;
-    margin: 0 0 10px 0;
-  }
-  
-  .subtitle {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin: 0 0 40px 0;
-  }
-  
-  .subtitle a {
-    color: var(--primary-purple);
-    text-decoration: underline;
-    font-weight: 500;
-  }
-  
-  form {
-    width: 100%;
-  }
-  
-  /* Botón Login/Sign Up (el botón oscuro) */
-  .auth-btn {
-    width: 100%;
-    padding: 14px;
-    border-radius: 30px;
-    background-color: #1a0b2e; /* Morado oscuro de la foto */
-    color: white;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: opacity 0.2s;
-  }
-  
-  .auth-btn:hover {
-    opacity: 0.9;
-  }
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--secondary-purple);
+  background-image: radial-gradient(ellipse at 70% 20%, rgba(99, 67, 216, 0.12) 0%, transparent 60%),
+                    radial-gradient(ellipse at 20% 80%, rgba(99, 67, 216, 0.08) 0%, transparent 50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUp 0.25s ease;
+}
+
+.auth-logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bg-sidebar);
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--bg-sidebar);
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 32px 0;
+  text-align: center;
+}
+
+.subtitle a {
+  color: var(--primary-purple);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.subtitle a:hover {
+  text-decoration: underline;
+}
+
+form {
+  width: 100%;
+}
+
+/* Error banner */
+.auth-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--status-cancelled-bg);
+  color: var(--status-cancelled-text);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  animation: slideDown 0.2s ease;
+}
+
+/* Info banner (session expired, etc.) */
+.auth-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background-color: rgba(99, 67, 216, 0.12);
+  color: var(--primary-purple);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  animation: slideDown 0.2s ease;
+}
+
+/* Submit button */
+.auth-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-sidebar);
+  color: white;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-btn:hover:not(:disabled) {
+  background-color: var(--bg-sidebar-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-btn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-btn .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

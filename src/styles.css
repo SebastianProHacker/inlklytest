@@ -3,33 +3,62 @@
     /* Colors */
     --bg-main: #f3f2f7;
     --bg-sidebar: #1a0b2e;
+    --bg-sidebar-hover: #2d1652;
     --bg-card: #ffffff;
     --primary-purple: #6343d8;
+    --primary-purple-hover: #5234c4;
     --secondary-purple: #f0ecff;
     --text-main: #1a1a1a;
     --text-muted: #6b7280;
     --border-color: #e5e7eb;
-    
-    /* Shared properties */
+    --border-focus: #c7bfff;
+
+    /* Status colors */
+    --status-quoted-bg: #ebfaff;
+    --status-quoted-text: #0076a3;
+    --status-cancelled-bg: #fff1f1;
+    --status-cancelled-text: #a30000;
+    --status-postponed-bg: #fff9e6;
+    --status-postponed-text: #a38100;
+    --status-completed-bg: #f0fdf4;
+    --status-completed-text: #166534;
+    --status-active-bg: #f0fdf4;
+    --status-active-text: #166534;
+    --status-inactive-bg: #f9fafb;
+    --status-inactive-text: #6b7280;
+
+    /* Radius */
     --radius-lg: 16px;
     --radius-md: 12px;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --radius-sm: 8px;
+    --radius-pill: 30px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+    /* Transitions */
+    --transition: all 0.2s ease;
   }
-  
+
   body {
     margin: 0;
     font-family: 'Inter', -apple-system, sans-serif;
     background-color: var(--bg-main);
     color: var(--text-main);
   }
-  
+
   /* Contenedor principal para el layout */
   .app-container {
     display: flex;
     min-height: 100vh;
   }
-  
+
   .main-content {
     flex: 1;
     padding: 24px 40px;
+    overflow: auto;
+    min-width: 0;
   }

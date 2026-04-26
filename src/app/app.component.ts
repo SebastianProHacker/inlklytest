@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from './components/layout/sidebar/sidebar.component'; 
+import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
 import { HeaderComponent } from './components/layout/header/header.component';
+import { ToastComponent } from './components/shared/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, 
-    SidebarComponent, 
-    HeaderComponent
+    RouterOutlet,
+    SidebarComponent,
+    HeaderComponent,
+    ToastComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

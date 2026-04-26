@@ -1,94 +1,153 @@
 .table-container {
-    background-color: var(--bg-card);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    box-shadow: var(--shadow);
-    margin-top: 20px;
-  }
-  
-  h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 24px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th {
-    text-align: left;
-    padding: 12px 16px;
-    color: var(--text-muted);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  td {
-    padding: 14px 16px;
-    font-size: 14px;
-  }
-  
-  tr.even {
-    background-color: var(--secondary-purple);
-    border-radius: 8px; /* Nota: CSS estándar no aplica radius a tr, pero el diseño lo sugiere */
-  }
-  
-  /* Efecto de redondeado en filas de la foto */
-  tr {
-    border-radius: 12px;
-  }
-  
-  .avatar-text-cell {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  
-  .cell-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  /* ... estilos anteriores que ya tenías ... */
-
-/* Estilos base del badge de estado */
-.status-badge {
-  display: inline-flex;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize; /* Convierte 'quoted' en 'Quoted' */
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-top: 20px;
 }
 
-/* Colores específicos para cada estado basados en tus Figma */
+h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 10px 16px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td {
+  padding: 13px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid transparent;
+}
+
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+  background-color: var(--secondary-purple);
+}
+
+tbody tr.even {
+  background-color: rgba(240, 236, 255, 0.45);
+}
+
+tbody tr.even:hover {
+  background-color: var(--secondary-purple);
+}
+
+.avatar-text-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cell-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--secondary-purple);
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
 .status-badge.quoted {
-  background-color: #ebfaff; /* Azul muy claro */
-  color: #0076a3;
+  background-color: var(--status-quoted-bg);
+  color: var(--status-quoted-text);
 }
 
 .status-badge.cancelled {
-  background-color: #fff1f1; /* Rojo muy claro */
-  color: #a30000;
+  background-color: var(--status-cancelled-bg);
+  color: var(--status-cancelled-text);
 }
 
 .status-badge.postponed {
-  background-color: #fff9e6; /* Amarillo muy claro */
-  color: #a38100;
+  background-color: var(--status-postponed-bg);
+  color: var(--status-postponed-text);
 }
 
 .status-badge.completed {
-  background-color: #f0fdf4; /* Verde muy claro */
-  color: #166534;
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed-text);
+}
+
+.status-badge.active {
+  background-color: var(--status-active-bg);
+  color: var(--status-active-text);
+}
+
+.status-badge.inactive {
+  background-color: var(--status-inactive-bg);
+  color: var(--status-inactive-text);
+}
+
+/* Loading skeleton */
+.skeleton-row td {
+  padding: 13px 16px;
+}
+
+.skeleton-cell {
+  height: 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, #f0ecff 25%, #e8e3ff 50%, #f0ecff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.skeleton-cell.short { width: 60%; }
+.skeleton-cell.avatar-skeleton {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  color: var(--text-muted);
+  gap: 12px;
+}
+
+.empty-state svg {
+  opacity: 0.35;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 14px;
 }

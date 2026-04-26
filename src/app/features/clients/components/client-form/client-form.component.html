@@ -1,0 +1,38 @@
+<app-dynamic-modal [data]="{ title: isEditMode ? 'Edit Client' : 'New Client' }">
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="client-form">
+
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" formControlName="fullName" placeholder="e.g. Alex Torres">
+      <span class="field-error" *ngIf="fullNameError">{{ fullNameError }}</span>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="e.g. alex@email.com">
+      <span class="field-error" *ngIf="emailErrors">{{ emailErrors }}</span>
+    </div>
+
+    <div class="form-group">
+      <label>Phone <span class="optional">(optional)</span></label>
+      <input type="tel" formControlName="phone" placeholder="e.g. +54 9 11 1234-5678">
+    </div>
+
+    <div class="form-group">
+      <label>Notes <span class="optional">(optional)</span></label>
+      <textarea formControlName="notes" rows="3" placeholder="Allergies, preferences, references..."></textarea>
+    </div>
+
+
+    <footer class="form-actions">
+      <app-action-button text="Cancel" variant="secondary" (click)="onCancel()"></app-action-button>
+      <app-action-button
+        [text]="isEditMode ? 'Save Changes' : 'Create Client'"
+        variant="primary"
+        type="submit"
+        [isLoading]="isSubmitting">
+      </app-action-button>
+    </footer>
+
+  </form>
+</app-dynamic-modal>

@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { DataTableComponent } from '../../components/shared/data-table/data-table.component';
 import { ActionButtonComponent } from '../../components/shared/action-button/action-button.component';
 import { PaginationComponent } from '../../components/shared/pagination/pagination.component';
 import { TableColumn } from '../../components/interfaces/table-config.interface';
-import { DynamicModalComponent } from '../../components/shared/dynamic-modal/dynamic-modal.component';
 import { NewAppointmentFormComponent } from './components/new-appointment-form/new-appointment-form.component';
+import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
+import { AppointmentService } from '../../core/services/appointment.service';
+import { Appointment, AppointmentStatus } from '../../core/models/appointment.model';
+import { SearchService } from '../../core/services/search.service';
+
+const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-agenda',
@@ -16,19 +22,32 @@ import { NewAppointmentFormComponent } from './components/new-appointment-form/n
     <div class="view-container">
       <div class="action-bar">
         <div class="left-actions">
-          <app-action-button text="Sort"></app-action-button>
-          <app-action-button text="Filter"></app-action-button>
+          <select class="status-filter" (change)="onStatusFilter($event)">
+            <option value="">Todos los estados</option>
+            <option *ngFor="let s of statuses" [value]="s.id">{{ s.name }}</option>
+          </select>
         </div>
-        <app-action-button text="New Appointment" variant="primary" (onClick)="openNewAppointmentModal()"></app-action-button>
+        <app-action-button
+          text="Nueva Cita"
+          variant="primary"
+          (onClick)="openNewAppointmentModal()">
+        </app-action-button>
       </div>
 
-      <app-data-table 
-        title="Appointments" 
-        [columns]="columns" 
-        [data]="appointments">
+      <app-data-table
+        title="Citas"
+        [columns]="columns"
+        [data]="pagedAppointments"
+        [isLoading]="isLoading"
+        (rowClicked)="openDetail($event)">
       </app-data-table>
 
-      <app-pagination></app-pagination>
+      <app-pagination
+        *ngIf="!isLoading && filteredAppointments.length > 0"
+        [totalPages]="totalPages"
+        [currentPage]="currentPage"
+        (pageChanged)="onPageChange($event)">
+      </app-pagination>
     </div>
   `,
   styles: [`
@@ -37,56 +56,152 @@ import { NewAppointmentFormComponent } from './components/new-appointment-form/n
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 8px;
     }
     .left-actions { display: flex; gap: 12px; }
+    .status-filter {
+      height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-md, 6px);
+      border: 1px solid var(--border-color, #e2e8f0);
+      background: var(--surface-card, #fff);
+      color: var(--text-primary, #1a202c);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+    .status-filter:focus { border-color: var(--accent, #5f55ee); }
   `]
 })
-export class AgendaComponent {
+export class AgendaComponent implements OnInit, OnDestroy {
+  isLoading = true;
+  currentPage = 1;
+  totalPages = 1;
+  allAppointments: any[] = [];
+  filteredAppointments: any[] = [];
+  statuses: AppointmentStatus[] = [];
+  searchTerm = '';
+  statusFilter = '';
+  private destroy$ = new Subject<void>();
+
   columns: TableColumn[] = [
-    { key: 'artist', label: 'Tattoo Artist', type: 'avatar-text' },
-    { key: 'category', label: 'Category', type: 'text' },
-    { key: 'date', label: 'Date', type: 'date' },
-    { key: 'amount', label: 'Amount', type: 'amount' }
+    { key: 'artist', label: 'Artista', type: 'avatar-text' },
+    { key: 'client', label: 'Cliente', type: 'text' },
+    { key: 'status', label: 'Estado', type: 'status' },
+    { key: 'date', label: 'Fecha Inicio', type: 'date' }
   ];
 
-  constructor(private dialog: Dialog) {}
+  get pagedAppointments(): any[] {
+    const start = (this.currentPage - 1) * PAGE_SIZE;
+    return this.filteredAppointments.slice(start, start + PAGE_SIZE);
+  }
 
-  openNewAppointmentModal() {
-    // Abrimos directamente el componente del formulario.
-    // Pasamos el título en el objeto 'data'
-    const dialogRef = this.dialog.open(NewAppointmentFormComponent, {
-      width: '480px', // Ancho aproximado según la imagen
-      data: { title: 'New Appointment' },
-      disableClose: true // Opcional: evita que se cierre al hacer clic fuera
+  constructor(
+    private dialog: Dialog,
+    private appointmentService: AppointmentService,
+    private cdr: ChangeDetectorRef,
+    private searchService: SearchService
+  ) {}
+
+  ngOnInit() {
+    this.loadAppointments();
+    this.searchService.search$.pipe(takeUntil(this.destroy$)).subscribe(term => {
+      this.searchTerm = term;
+      this.currentPage = 1;
+      this.applyFilter();
+      this.cdr.markForCheck();
     });
+  }
 
-    dialogRef.closed.subscribe(result => {
-      if (result) {
-        console.log('Datos recibidos:', result);
-        // Aquí puedes añadir la lógica para actualizar tu tabla 'appointments'
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadAppointments() {
+    this.isLoading = true;
+    forkJoin({
+      appointments: this.appointmentService.getAppointments(),
+      statuses: this.appointmentService.getStatuses(),
+    }).subscribe({
+      next: ({ appointments, statuses }) => {
+        this.statuses = statuses;
+        this.allAppointments = appointments.map(a => this.mapRow(a));
+        this.applyFilter();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.allAppointments = [];
+        this.filteredAppointments = [];
+        this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
-  // Datos de prueba basados en tu imagen
-  appointments = [
-    { 
-      artist: { name: 'Parviz Aslanov', avatarUrl: 'https://i.pravatar.cc/150?u=1' }, 
-      category: 'Fine Line', 
-      date: new Date('2023-11-20'), 
-      amount: 1700 
-    },
-    { 
-      artist: { name: 'Sevinj Aslanova', avatarUrl: 'https://i.pravatar.cc/150?u=2' }, 
-      category: 'Portraits', 
-      date: new Date('2023-02-19'), 
-      amount: 1200 
-    },
-    { 
-      artist: { name: 'Ceyhun Aslanov', avatarUrl: 'https://i.pravatar.cc/150?u=3' }, 
-      category: 'Color work', 
-      date: new Date('2024-05-18'), 
-      amount: 3999 
+
+  onStatusFilter(event: Event) {
+    this.statusFilter = (event.target as HTMLSelectElement).value;
+    this.currentPage = 1;
+    this.applyFilter();
+  }
+
+  private applyFilter() {
+    let result = [...this.allAppointments];
+    if (this.searchTerm) {
+      result = result.filter(a =>
+        a.client?.toLowerCase().includes(this.searchTerm) ||
+        a.artist?.name?.toLowerCase().includes(this.searchTerm)
+      );
     }
-  ];
+    if (this.statusFilter) {
+      const id = Number(this.statusFilter);
+      result = result.filter(a => a._raw?.statusId === id);
+    }
+    this.filteredAppointments = result;
+    this.totalPages = Math.ceil(this.filteredAppointments.length / PAGE_SIZE) || 1;
+  }
+
+  private mapRow(a: Appointment): any {
+    const name = a.tattooArtist?.fullName ?? 'Sin artista';
+    return {
+      _raw: a,
+      artist: {
+        name,
+        avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=7c5cbf&color=fff&size=40`
+      },
+      client: a.client?.fullName ?? '—',
+      status: a.status?.name ?? '—',
+      date: new Date(a.appointmentStart)
+    };
+  }
+
+  openNewAppointmentModal() {
+    const ref = this.dialog.open(NewAppointmentFormComponent, {
+      width: '520px',
+      disableClose: true
+    });
+
+    ref.closed.subscribe((created: any) => {
+      if (created) this.loadAppointments();
+    });
+  }
+
+  openDetail(row: any) {
+    const appointment: Appointment = row._raw;
+    const ref = this.dialog.open(AppointmentDetailComponent, {
+      width: '560px',
+      disableClose: false,
+      data: { appointmentId: appointment.id }
+    });
+
+    ref.closed.subscribe((updated: any) => {
+      if (updated) this.loadAppointments();
+    });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+  }
 }

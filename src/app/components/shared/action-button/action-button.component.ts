@@ -7,15 +7,24 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <button class="action-btn" [class]="variant" (click)="onClick.emit()">
-      {{text}}
+    <button
+      class="action-btn"
+      [ngClass]="[variant, isLoading ? 'loading' : '']"
+      [disabled]="disabled || isLoading"
+      [attr.type]="type"
+      (click)="onClick.emit()">
+      <span *ngIf="isLoading" class="spinner"></span>
+      <span class="btn-text">{{text}}</span>
     </button>
   `,
   styleUrls: ['./action-button.component.css']
 })
 export class ActionButtonComponent {
   @Input() text: string = '';
-  @Input() icon: string = ''; // Entidad HTML o clase de icono
-  @Input() variant: 'primary' | 'secondary' = 'secondary';
+  @Input() icon: string = '';
+  @Input() variant: 'primary' | 'secondary' | 'danger' = 'secondary';
+  @Input() disabled: boolean = false;
+  @Input() isLoading: boolean = false;
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Output() onClick = new EventEmitter<void>();
 }
